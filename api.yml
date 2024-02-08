@@ -17,37 +17,160 @@ info:
 servers:
   - url: http://localhost
 paths:
-  /hello:
-    get:
-      summary: This is just a test endpoint to get you started. Please delete this endpoint.
-      operationId: hello
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            type: integer
+  /registration:
+    post:
+      summary: Registration a new user
+      operationId: Registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phoneNumber
+                - fullName
+                - password
+              properties:
+                phoneNumber:
+                  type: string
+                fullName:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationResponse"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /login:
+    post:
+      summary: Login to the system
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phoneNumber
+                - password
+              properties:
+                phoneNumber:
+                  type: string
+                password:
+                  type: string
       responses:
         '200':
-          description: Test return
+          description: User logged in
           content:
-            application/json:    
+            application/json:
               schema:
-                $ref: "#/components/schemas/HelloResponse"
-        '404':
-          description: Not found
+                $ref: "#/components/schemas/LoginResponse"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /my-profile:
+    get:
+      summary: Get my profile
+      operationId: getMyProfile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyProfileResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Update my profile
+      operationId: updateMyProfile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumber:
+                  type: string
+                fullName:
+                  type: string
+      responses:
+        '200':
+          description: My profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateMyProfileResponse"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '409':
+          description: Conflict
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
-    HelloResponse:
+    RegistrationResponse:
       type: object
       required:
-        - message
+        - userId
       properties:
-        message:
+        userId:
+          type: string
+    LoginResponse:
+      type: object
+      required:
+        - userId
+        - jwt
+      properties:
+        userId:
+          type: string
+        jwt:
+          type: string
+    MyProfileResponse:
+      type: object
+      required:
+        - phoneNumber
+        - fullName
+      properties:
+        phoneNumber:
+          type: string
+        fullName:
+          type: string
+    UpdateMyProfileResponse:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+        fullName:
           type: string
     ErrorResponse:
       type: object
