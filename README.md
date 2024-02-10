@@ -4,9 +4,9 @@
 
 To run this project you need to have the following installed:
 
-1. [Go](https://golang.org/doc/install) version 1.19
-2. [Docker](https://docs.docker.com/get-docker/) version 20
-3. [Docker Compose](https://docs.docker.com/compose/install/) version 1.29
+1. [Go](https://golang.org/doc/install) version 1.20
+2. [Docker](https://docs.docker.com/get-docker/) version 20 or later
+3. [Docker Compose](https://docs.docker.com/compose/install/) version 1.29 or later
 4. [GNU Make](https://www.gnu.org/software/make/)
 5. [oapi-codegen](https://github.com/deepmap/oapi-codegen)
 
@@ -19,6 +19,11 @@ To run this project you need to have the following installed:
     Install the latest version with:
     ```
     go install github.com/golang/mock/mockgen@latest
+    ```
+7. generate private pem files for JWT token
+
+    ```
+    openssl genpkey -algorithm RSA -out private.pem
     ```
 
 ## Initiate The Project

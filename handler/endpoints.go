@@ -2,21 +2,18 @@ package handler
 
 import (
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 
 	"github.com/SawitProRecruitment/UserService/generated"
+	"github.com/SawitProRecruitment/UserService/helper"
 	"github.com/SawitProRecruitment/UserService/repository"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/lib/pq"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // (POST /registration)
 func (s *Server) Registration(ctx echo.Context) error {
-
 	// Create RegistrationJSONRequestBody object
 	var body generated.RegistrationJSONRequestBody
 	if err := ctx.Bind(&body); err != nil {
@@ -38,14 +35,14 @@ func (s *Server) Registration(ctx echo.Context) error {
 	if len(body.Password) < 6 || len(body.Password) > 64 {
 		return ctx.JSON(http.StatusBadRequest, "Password must be between 6 and 64 characters")
 	}
-	if !ContainsCapital(body.Password) || !ContainsNumber(body.Password) || !ContainsSpecialCharacter(body.Password) {
+	if !helper.ContainsCapital(body.Password) || !helper.ContainsNumber(body.Password) || !helper.ContainsSpecialCharacter(body.Password) {
 		return ctx.JSON(http.StatusBadRequest, "Password must contain at least 1 capital letter, 1 number, and 1 special character")
 	}
 
 	// Hash and salt the password
-	hashedPassword, err := HashPassword(body.Password)
+	hashedPassword, err := s.Helper.HashPassword(body.Password)
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, "Failed to hash password")
+		return ctx.JSON(http.StatusBadRequest, "Failed to hash password")
 	}
 
 	input := repository.RegistrationInput{
@@ -61,7 +58,7 @@ func (s *Server) Registration(ctx echo.Context) error {
 			// Handle duplicate key error
 			return ctx.JSON(http.StatusBadRequest, "Phone number has been used to register another account")
 		}
-		return ctx.JSON(http.StatusInternalServerError, err)
+		return ctx.JSON(http.StatusBadRequest, err)
 	}
 
 	return ctx.JSON(http.StatusCreated, output)
@@ -69,11 +66,16 @@ func (s *Server) Registration(ctx echo.Context) error {
 
 // (POST /login)
 func (s *Server) Login(ctx echo.Context) error {
-
 	// Create LoginJSONRequestBody object
 	var body generated.LoginJSONRequestBody
 	if err := ctx.Bind(&body); err != nil {
 		return ctx.JSON(http.StatusBadRequest, "Invalid request body")
+	}
+
+	// Validate phone number format
+	phoneNumberRegex := regexp.MustCompile(`^\+62\d{8,11}$`)
+	if !phoneNumberRegex.MatchString(body.PhoneNumber) {
+		return ctx.JSON(http.StatusBadRequest, "Phone number must start with '+62' and have 10-13 digits")
 	}
 
 	// Call repository method for login
@@ -87,32 +89,14 @@ func (s *Server) Login(ctx echo.Context) error {
 	}
 
 	// Verify the provided password against the hashed password stored in the database
-	if err := bcrypt.CompareHashAndPassword([]byte(output.Password), []byte(body.Password)); err != nil {
+	if err := s.Helper.ComparePassword(output.Password, body.Password); err != nil {
 		return ctx.JSON(http.StatusBadRequest, "Invalid password")
 	}
 
-	// Password is correct, proceed with login
-
-	// Load RSA private key
-	privateKeyBytes, err := os.ReadFile("private.pem")
+	// Generate JWT token
+	tokenString, err := s.Helper.GenerateJWT(output.Id)
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
-	}
-
-	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(privateKeyBytes)
-	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
-	}
-
-	// Generate JWT token with RS256 signing method
-	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
-		"id": output.Id,
-	})
-
-	// Sign the token with RSA private key
-	tokenString, err := token.SignedString(privateKey)
-	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, err)
+		return ctx.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	// Create the response object containing the user ID and JWT token
@@ -141,32 +125,9 @@ func (s *Server) GetMyProfile(ctx echo.Context) error {
 
 	// Parse the token
 	tokenString := parts[1]
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Load RSA private key
-		privateKeyBytes, err := os.ReadFile("private.pem")
-		if err != nil {
-			return nil, err
-		}
-
-		privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(privateKeyBytes)
-		if err != nil {
-			return nil, err
-		}
-		return privateKey.Public(), nil
-	})
+	claims, err := s.Helper.ParseJWT(tokenString)
 	if err != nil {
 		return ctx.JSON(http.StatusForbidden, err.Error())
-	}
-
-	// Check if the token is valid
-	if !token.Valid {
-		return ctx.JSON(http.StatusForbidden, "Invalid JWT token")
-	}
-
-	// Extract claims from the token
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		return ctx.JSON(http.StatusForbidden, "Failed to extract claims from JWT token")
 	}
 
 	// Extract the user ID from the claims
@@ -209,32 +170,9 @@ func (s *Server) UpdateMyProfile(ctx echo.Context) error {
 
 	// Parse the token
 	tokenString := parts[1]
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Load RSA private key
-		privateKeyBytes, err := os.ReadFile("private.pem")
-		if err != nil {
-			return nil, err
-		}
-
-		privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(privateKeyBytes)
-		if err != nil {
-			return nil, err
-		}
-		return privateKey.Public(), nil
-	})
+	claims, err := s.Helper.ParseJWT(tokenString)
 	if err != nil {
 		return ctx.JSON(http.StatusForbidden, err.Error())
-	}
-
-	// Check if the token is valid
-	if !token.Valid {
-		return ctx.JSON(http.StatusForbidden, "Invalid JWT token")
-	}
-
-	// Extract claims from the token
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		return ctx.JSON(http.StatusForbidden, "Failed to extract claims from JWT token")
 	}
 
 	// Extract the user ID from the claims
