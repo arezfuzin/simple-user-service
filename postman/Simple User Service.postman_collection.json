@@ -1,0 +1,892 @@
+{
+	"info": {
+		"_postman_id": "36ec5efa-629d-453e-98ff-324df8d22aeb",
+		"name": "Simple User Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6609718"
+	},
+	"item": [
+		{
+			"name": "registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phoneNumber\": \"+628117892522\",\n    \"fullName\": \"TEST\",\n    \"password\": \"@Apa123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/registration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"registration"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "duplicate phone number",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+628117892522\",\n    \"fullName\": \"TEST\",\n    \"password\": \"@Apa123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:29:59 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "57"
+						}
+					],
+					"cookie": [],
+					"body": "\"Phone number has been used to register another account\""
+				},
+				{
+					"name": "success registration",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+628117892523\",\n    \"fullName\": \"TEST\",\n    \"password\": \"@Apa123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:30:35 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"UserId\": \"692d8811-4b12-4d7a-8680-28eab7245c58\"\n}"
+				},
+				{
+					"name": "phone number should start with +62",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"8117892524\",\n    \"fullName\": \"TEST\",\n    \"password\": \"@Apa123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:31:05 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						}
+					],
+					"cookie": [],
+					"body": "\"Phone number must start with '+62' and have 10-13 digits\""
+				},
+				{
+					"name": "phone number must have 10-13 digits",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+62811\",\n    \"fullName\": \"TEST\",\n    \"password\": \"@Apa123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:31:44 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						}
+					],
+					"cookie": [],
+					"body": "\"Phone number must start with '+62' and have 10-13 digits\""
+				},
+				{
+					"name": "password mush 6-64 char length",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+628117892524\",\n    \"fullName\": \"TEST\",\n    \"password\": \"a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:32:43 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "47"
+						}
+					],
+					"cookie": [],
+					"body": "\"Password must be between 6 and 64 characters\""
+				},
+				{
+					"name": "password format invalid",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+628117892524\",\n    \"fullName\": \"TEST\",\n    \"password\": \"Apa123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:33:13 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "85"
+						}
+					],
+					"cookie": [],
+					"body": "\"Password must contain at least 1 capital letter, 1 number, and 1 special character\""
+				}
+			]
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phoneNumber\": \"+628117892512\",\n    \"password\": \"@Test123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+628117892512\",\n    \"password\": \"@Test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:34:01 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "499"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jwt\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU3MTQyNmYwLTQ5MzMtNDZjYi04ZmI1LTAwNjRkMzYxM2RiNiJ9.kg2EJlqw3MBMkN49NIqk66jxkOxtYNsnwz_NoAPByCWyafc0yanNv8H7lb-V3Xr1n-xY6gZd9qNNbJjicDqY3MotZZKfHhxDzBcYdHNc1G396xKnCK94PCwmy8h9LJr0LO7lEEAjvbdFlyB8lFCVuC15v4XNM9-94ytD8rtJVI5u9OXQVd33-UUXNvBg4J22mVewckY2pDEexT0ogxPmY5fFOpnOGevGFqLp4YRqCCRQakL1L3m8-0ynaEIWtoAPnHibiXY3CAKfxeAt9pOLCRxUQ-yVXQgdCELewJata99GSRJ9GGGfgDrG_L48LkYQRvgAdpSqrAqQi7GzDWs8NA\",\n    \"userId\": \"571426f0-4933-46cb-8fb5-0064d3613db6\"\n}"
+				},
+				{
+					"name": "phone number length must 10-13 digits",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"+6281\",\n    \"password\": \"@Test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:34:47 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						}
+					],
+					"cookie": [],
+					"body": "\"Phone number must start with '+62' and have 10-13 digits\""
+				},
+				{
+					"name": "phone number must start with +62",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"8117892512\",\n    \"password\": \"@Test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:35:11 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						}
+					],
+					"cookie": [],
+					"body": "\"Phone number must start with '+62' and have 10-13 digits\""
+				}
+			]
+		},
+		{
+			"name": "get my profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyODFjNWFjLWEwMjItNDgyZi1hMGM4LWNhMDFhMDg4MTUwZCJ9.jb599YOgoDwYv6nlsHIA3QnJE-4dqwqMYihZMJu9vLweEmGHZOViCiEmy8aWZ4BNWBBx6lWDBheDM0bAFKXRTgkuRZWJWaJoVpwxmHb6ho6R4ECRShyXTy_oBwW09GzAWz3QGfhCxh2hCY2NbWNdGIXnrL0Z5O5TLwC4PDNsd6jazMMil1Sc38ZyRq6tcg5babrSo8OECNZwJ8OOfz34PLdEB4Ws_6IfM9QhnS2i6W936dEsqonb9fsiNG-QqV8jK74QZt3dQMMbuUKos_Z0Oj-EgxjFtM7E3cqprINcTkqkTlfYKFBahYKwD6RfIYynoZTjxEm-yD3lU8q8aYBuOw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/my-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"my-profile"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success get my profile",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:35:35 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"FullName\": \"Anugrah\",\n    \"PhoneNumber\": \"+628117892514\"\n}"
+				},
+				{
+					"name": "no token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:36:05 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "22"
+						}
+					],
+					"cookie": [],
+					"body": "\"JWT token not found\""
+				},
+				{
+					"name": "invalid token",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:36:34 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						}
+					],
+					"cookie": [],
+					"body": "\"invalid character '\\\\x05' looking for beginning of value\""
+				}
+			]
+		},
+		{
+			"name": "update my profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyODFjNWFjLWEwMjItNDgyZi1hMGM4LWNhMDFhMDg4MTUwZCJ9.jb599YOgoDwYv6nlsHIA3QnJE-4dqwqMYihZMJu9vLweEmGHZOViCiEmy8aWZ4BNWBBx6lWDBheDM0bAFKXRTgkuRZWJWaJoVpwxmHb6ho6R4ECRShyXTy_oBwW09GzAWz3QGfhCxh2hCY2NbWNdGIXnrL0Z5O5TLwC4PDNsd6jazMMil1Sc38ZyRq6tcg5babrSo8OECNZwJ8OOfz34PLdEB4Ws_6IfM9QhnS2i6W936dEsqonb9fsiNG-QqV8jK74QZt3dQMMbuUKos_Z0Oj-EgxjFtM7E3cqprINcTkqkTlfYKFBahYKwD6RfIYynoZTjxEm-yD3lU8q8aYBuOw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"PhoneNumber\": \"+628117892514\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/my-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"my-profile"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success update phone number",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PhoneNumber\": \"+628117892533\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:37:27 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"FullName\": \"Anugrah\",\n    \"PhoneNumber\": \"+628117892533\"\n}"
+				},
+				{
+					"name": "success update full name",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"haha\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:38:10 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"FullName\": \"haha\",\n    \"PhoneNumber\": \"+628117892533\"\n}"
+				},
+				{
+					"name": "duplicate phone number",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PhoneNumber\": \"+628117892512\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:48:20 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "57"
+						}
+					],
+					"cookie": [],
+					"body": "\"Phone number has been used to register another account\""
+				},
+				{
+					"name": "no token",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PhoneNumber\": \"+628117892512\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:48:58 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "22"
+						}
+					],
+					"cookie": [],
+					"body": "\"JWT token not found\""
+				},
+				{
+					"name": "invalid token",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PhoneNumber\": \"+628117892512\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"my-profile"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 10 Feb 2024 08:49:20 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						}
+					],
+					"cookie": [],
+					"body": "\"invalid character '\\\\x05' looking for beginning of value\""
+				}
+			]
+		}
+	]
+}
